@@ -22,9 +22,7 @@
 			private function onComplete(e:Event):void
 			{
 				var plist:Plist10=new Plist10();
-				plist.parse(Bin2Xml.getXML(e.target.data));
-				
+				plist.decode(Bin2Xml.getXML(e.target.data));				
 			}
-
 	}
 }

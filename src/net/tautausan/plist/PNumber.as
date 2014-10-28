@@ -24,54 +24,28 @@
  package net.tautausan.plist
 {
 	/**
-	 *	Property List ver 1.0 
+	 *	Property List Number 
 	 * @author dai
 	 * 
 	 */	
-	public class Plist10 extends Plist
+	public class PNumber extends PlistElement
 	{
-		protected var data:Object;
-		
-		public function Plist10()
+		public function PNumber(o:*)
 		{
-			super();
-			
-			data=new Object();
+			super(o);
+		}		
+		
+		override protected function xmlToData():* {			
+			var name = this.xml.name();
+			return name == "real" ? parseFloat(this.xml) : parseInt(this.xml, 10); 
 		}
 		
-		public function get root():Object
-		{
-			return data;
-		}
-		
-		override public function parse(xmlStr:String):void
-		{
-			x=new XML(xmlStr);
-						
-			if(x.dict==null)
-			{
-				data=null;
-			}
-			else
-			{
-				data=new Object();
-				var node:XML;
-				var key:XML;
-				
-				for each(node in x.dict.*)
-				{
-					if(node.name()=="key")
-					{
-						key=node;
-					}
-					else
-					{
-						if(key)
-						{
-							data[key]=ParseUtils.valueFromXML(node);
-						}
-					}
-				}
+		override protected function dataToXml():XML {
+			var number:Number = this.object as Number;
+			if (number - Math.floor(number) != 0) {
+				return new XML("<real>" + number.toString() + "</real>");
+			} else {
+				return new XML("<integer>" + number.toString() + "</integer>");
 			}
 		}
 	}

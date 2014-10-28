@@ -26,31 +26,21 @@
 	/**
 	 *	Property List Boolean 
 	 * @author dai
-	 * 
+	 * @modifier xophiix
 	 */	
 	public class PBoolean extends PlistElement
 	{
-		public function PBoolean(x:XML)
+		public function PBoolean(o:*)
 		{
-			super(x);
+			super(o);
 		}
 		
+		override protected function xmlToData():* {			
+			return this.xml.name() == "true";			
+		}
 		
-		override public function get object():*
-		{
-			if(!data)
-			{
-			
-				if(x.name()=="true")
-				{
-					return true;
-				}
-				else if(x.name()=="false")
-				{
-					return false;
-				}
-			}
-			return data;
+		override protected function dataToXml():XML {
+			return this.object ? <true/> : <false/>;
 		}
 	}
 }

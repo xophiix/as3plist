@@ -24,32 +24,79 @@
  package net.tautausan.plist
 {
 	import flash.errors.IllegalOperationError;
+	import flash.utils.Proxy;
+	import flash.utils.flash_proxy;
+	
 	/**
-	 *	Property List Foundation 
+	 *	Foundation of all Property List Elements 
 	 * @author dai
-	 * 
-	 */	
-	public class Plist
+	 * @modifier xophiix
+	 */		
+	public class PlistElement extends Proxy
 	{
-		protected var x:XML;
+		private var x:XML;
+		private var data:*;
 		
-		public function Plist()
+		public function PlistElement(o:*)
 		{
+			if (o is XML) {
+				this.x = o;
+			} else {
+				this.data = o;	
+			}			
 		}
-				
-		public function parse(xmlStr:String):void
+		
+		override flash_proxy function getProperty(name:*):* 
 		{
-			throw new IllegalOperationError("This is an abstract method.");
+			var data:* = this.object;
+			if (data !== undefined)
+			{
+				return data[name];
+			}
+			
+			return null;
+		}
+		
+		override flash_proxy function callProperty(name:*, ... rest):*
+		{
+			var data:* = this.object;
+			if(rest.length<1)
+			{
+				return data[name]();
+			}
+			
+			return data[name](rest);
 		}
 		
 		public function set xml(x:XML):void
 		{
-			this.x=x;
+			this.x = x;
+			this.data= this.object;
 		}
 		
 		public function get xml():XML
 		{
-			return x;
+			if (!this.x && this.data !== undefined) {
+				this.x = dataToXml();
+			}
+			
+			return this.x;
+		}
+		
+		public function get object():* {
+			if (this.data == undefined && this.x) {
+				this.data = xmlToData();
+			}
+			
+			return this.data;
+		}
+
+		protected function xmlToData():* {
+			throw new IllegalOperationError("must implement this method");
+		}
+		
+		protected function dataToXml():XML {
+			throw new IllegalOperationError("must implement this method");	
 		}
 	}
 }

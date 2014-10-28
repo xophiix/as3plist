@@ -23,25 +23,75 @@
  */
  package net.tautausan.plist
 {
+	import flash.utils.ByteArray;
+
 	/**
-	 * Property List String 
+	 *	Property List ver 1.0 
 	 * @author dai
-	 * 
+	 * @modifier xophiix
 	 */	
-	public class PString extends PlistElement
+	public class Plist10 extends Plist
 	{
-		public function PString(x:XML)
+		protected var data:Object;
+		
+		public function Plist10()
 		{
-			super(x);
 		}
 		
-		override public function get object():*
+		public function get root():Object
 		{
-			if(!data)
-			{
-				return x.toString();
-			}
 			return data;
+		}
+		
+		override public function decode(xmlStr:String):Object
+		{
+			x = new XML(xmlStr);
+						
+			if(x.dict == null)
+			{
+				data = null;
+			}
+			else
+			{
+				data=new Object();
+				var node:XML;
+				var key:XML;
+				
+				for each(node in x.dict.*)
+				{
+					if(node.name()=="key")
+					{
+						key=node;
+					}
+					else
+					{
+						if(key)
+						{
+							data[key]=ParseUtils.valueFromXML(node);
+						}
+					}
+				}
+			}
+			
+			return data;
+		}
+		
+		private function encodeXML(o:Object):XML {
+			o = o || this.root;
+			var xml:XML = <plist version="1.0"/>;					
+			xml.appendChild(ParseUtils.valueToXML(o));			
+			return xml;
+		}
+		
+		override public function encode(o:Object = null):String {
+			var fileHeader:String = '<?xml version="1.0" encoding="UTF-8"?>\n' + 
+				'<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n';
+			
+			return fileHeader + encodeXML(o).toXMLString();
+		}
+		
+		override public function encodeBinary(o:Object = null):ByteArray {
+			return Xml2Bin.getBytes(encodeXML(o));
 		}
 	}
 }

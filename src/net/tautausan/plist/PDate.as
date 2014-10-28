@@ -23,63 +23,63 @@
  */
  package net.tautausan.plist
 {
-	import flash.utils.Proxy;
-	import flash.utils.flash_proxy;
-	
 	/**
-	 *	Foundation of all Property List Elements 
+	 *	Property List Date 
 	 * @author dai
-	 * 
-	 */		
-	public class PlistElement extends Proxy
+	 * @modifier xophiix
+	 */	
+	public class PDate extends PlistElement
 	{
-		protected var x:XML;
-		protected var data:*;
-		
-		public function PlistElement(x:XML)
+		public function PDate(o:*)
 		{
-			this.x=x;
-			this.data=object;
+			super(o);
 		}
-		
-		override flash_proxy function getProperty(name:*):* 
-		{
+	
+		override protected function xmlToData():* {			
+			var dateStr:String=this.xml.toString();
 			
-			var data:* = this.object;
+			var d:Array=dateStr.match(/([\d.,:\-W]+)(?:T([\d.,:\-+WZ]*))?/);
+			var dateFormat:String = d[1];
+			var timeFormat:String = d[2];
 			
-			if(data && data[name])
-			{
-				return data[name];
+			var days:Array = dateFormat.match(/^(\d{2})(?:\-?(\d{2}))?(?:\-?(\d{2}))?(?:\-?(\d{2}))?$/);
+			var times:Array = timeFormat.match(/^(\d{2})(?:[,.](\d+)(?=[+\-Z]|$))?(?:\:?(\d{2})(?:[,.](\d+)(?=[+\-Z]|$))?)?(?:\:?(\d{2})(?:[,.](\d+)(?=[+\-Z]|$))?)?(.*)/);
+			
+			var yyyy:int;
+			var mm:int;
+			var dd:int;
+			var hh:int;
+			var nn:int;
+			var ss:int;
+			
+			if (days && days.length > 0) {
+				yyyy = days[1] + days[2];
+				mm = days[3];
+				dd = days[4];
 			}
-			return null;
-		}
-		
-		override flash_proxy function callProperty(name:*, ... rest):*
-		{
-			var data:* = this.object;
-			
-			if(rest.length<1)
+			else
 			{
-				return data[name]();
+				yyyy = mm = dd = 0;
 			}
-			return data[name](rest);
+			
+			if (times && times.length > 0) {
+				hh = times[1];
+				nn = times[3];
+				ss = times[5];
+			}
+			else {
+				hh = nn = ss = 0;
+			}
+			
+			var date:Date = new Date();
+			date.setUTCFullYear(yyyy,mm-1,dd);
+			date.setUTCHours(hh,nn,ss,0);
+			
+			return date;
 		}
 		
-		public function set xml(x:XML):void
-		{
-			this.x=x;
-			this.data=object;
+		override protected function dataToXml():XML {
+			return new XML("<date>" + (this.object as Date).toString() +"</date>");			
 		}
-		
-		public function get xml():XML
-		{
-			return this.x;
-		}
-		
-		public function get object():*
-		{
-			return this.data;
-		}
-
 	}
 }

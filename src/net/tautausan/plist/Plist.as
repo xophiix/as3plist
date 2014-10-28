@@ -21,48 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package net.tautausan.plist
+ package net.tautausan.plist
 {
-	import flash.utils.*;
+	import flash.errors.IllegalOperationError;
+	import flash.utils.ByteArray;
+
 	/**
-	 *	Property List Dictionary 
+	 *	Property List Foundation 
 	 * @author dai
 	 * 
 	 */	
-	dynamic public class PDict extends PlistElement
+	public class Plist
 	{
+		protected var x:XML;
 		
-		public function PDict(x:XML)
+		public function Plist()
 		{
-			super(x);
+		}
+				
+		public function decode(xmlStr:String):Object
+		{
+			throw new IllegalOperationError("This is an abstract method.");
 		}
 		
-		override public function get object():*
-		{
-			
-			if(!data)
-			{
-				var dic:Object=new Object();
-				var key:XML;
-				var node:XML;
-				for each(node in x.*)
-				{
-					if(node.name()=="key")
-					{
-						key=node;
-					}
-					else
-					{
-						if(key)
-						{
-							dic[key]=ParseUtils.valueFromXML(node);
-						}
-					}
-				}
-				return dic;
-			}
-			return data;
+		public function encode(data:Object = null):String {
+			throw new IllegalOperationError("This is an abstract method.");
 		}
 		
+		public function encodeBinary(data:Object = null):ByteArray {
+			throw new IllegalOperationError("This is an abstract method.");
+		}
+		
+		public function set xml(x:XML):void
+		{
+			this.x=x;
+		}
+		
+		public function get xml():XML
+		{
+			return x;
+		}
 	}
 }

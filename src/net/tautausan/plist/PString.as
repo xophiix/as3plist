@@ -24,66 +24,23 @@
  package net.tautausan.plist
 {
 	/**
-	 *	Property List Date 
+	 * Property List String 
 	 * @author dai
-	 * 
+	 * @modifier xophiix
 	 */	
-	public class PDate extends PlistElement
+	public class PString extends PlistElement
 	{
-		public function PDate(x:XML)
+		public function PString(o:*)
 		{
-			super(x);
-		}
-	
-		override public function get object():*
-		{
-			
-			if(!data)
-			{
-				
-				var dateStr:String=x.toString();
-				
-				var d:Array=dateStr.match(/([\d.,:\-W]+)(?:T([\d.,:\-+WZ]*))?/);
-				var dateFormat:String = d[1];
-				var timeFormat:String = d[2];
-				
-				var days:Array = dateFormat.match(/^(\d{2})(?:\-?(\d{2}))?(?:\-?(\d{2}))?(?:\-?(\d{2}))?$/);
-				var times:Array = timeFormat.match(/^(\d{2})(?:[,.](\d+)(?=[+\-Z]|$))?(?:\:?(\d{2})(?:[,.](\d+)(?=[+\-Z]|$))?)?(?:\:?(\d{2})(?:[,.](\d+)(?=[+\-Z]|$))?)?(.*)/);
-				
-				var yyyy:int;
-				var mm:int;
-				var dd:int;
-				var hh:int;
-				var nn:int;
-				var ss:int;
-				
-				if (days && days.length > 0) {
-					yyyy = days[1] + days[2];
-					mm = days[3];
-					dd = days[4];
-				}
-				else
-				{
-					yyyy = mm = dd = 0;
-				}
-				
-				if (times && times.length > 0) {
-					hh = times[1];
-					nn = times[3];
-					ss = times[5];
-				}
-				else {
-					hh = nn = ss = 0;
-				}
-	
-				var date:Date=new Date();
-				date.setUTCFullYear(yyyy,mm-1,dd);
-				date.setUTCHours(hh,nn,ss,0);
-				
-				return date;
-			}
-			return data;
+			super(o);
 		}
 		
+		override protected function xmlToData():* {			
+			return this.xml.toString();
+		}
+		
+		override protected function dataToXml():XML {
+			return new XML("<string>" + this.object + "</string>");
+		}
 	}
 }

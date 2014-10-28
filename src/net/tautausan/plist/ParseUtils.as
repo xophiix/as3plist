@@ -38,8 +38,8 @@
 		static public function valueFromXML(node:XML):*
 		{
 			var val:*;
-
-			switch(node.name().toString())
+			var nodeName:String = node.name().toString();
+			switch(nodeName)
 			{
 				case "array":
 					val=new PArray(node);
@@ -61,9 +61,49 @@
 				case "real":
 				case "integer":
 					val=new PNumber(node);
-
+					break;
+				default:					
+					throw new Error("valueFromXML: unknown plist node type " + nodeName);
 			}
 			return val;
+		}
+		
+		static public function valueToXML(val:*):XML 
+		{
+			var type:String = typeof(val);
+			if (type == "object") {
+				if (val is Array) {
+					type = "array";
+				} else if (val is Date) {
+					type = "date";
+				}
+			} 
+			
+			var element:* = null;
+			switch (type) {
+				case "array":
+					element=new PArray(val);
+					break;
+				case "object":
+					element=new PDict(val);
+					break;
+				case "date":
+					element=new PDate(val);
+					break;
+				case "string":
+					element=new PString(val);
+					break;
+				case "boolean": 
+					element=new PBoolean(val);
+					break;
+				case "number":				
+					element=new PNumber(val);
+					break;
+				default:
+					throw new Error("valueToXML: unknown value type " + type);					
+			}
+			
+			return element.xml;
 		}
 	}
 }

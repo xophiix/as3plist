@@ -24,31 +24,36 @@
  package net.tautausan.plist
 {
 	/**
-	 *	Property List Number 
+	 *	Property List Array 
 	 * @author dai
-	 * 
+	 * @modifier xophiix
 	 */	
-	public class PNumber extends PlistElement
-	{
-		public function PNumber(x:XML)
-		{
-			super(x);
+	class PArray extends PlistElement {
+		public function PArray(o:*) {
+			super(o);
 		}
 		
-		override public function get object():*
-		{
-			if(!data)
-			{
-				if(x.name()=="real")
-				{
-					return parseFloat(x.toString());
-				}
-				else if(x.name()=="integer")
-				{
-					return parseInt(x.toString(), 10);
-				}
+		override protected function xmlToData():* {			
+			var nodes = this.xml.*;
+			var length:uint = nodes.length();
+			var result = new Array();
+
+			for(var i:uint = 0; i < length; i++) {
+				result.push(ParseUtils.valueFromXML(nodes[i]));
 			}
-			return data;
+			
+			return result;
+		}
+		
+		override protected function dataToXml():XML {
+			var result:XML = <array></array>;
+			var array:Array = this.object as Array;
+			
+			for(var i:uint = 0; i < array.length; i++) {
+				result.appendChild(ParseUtils.valueToXML(array[i]));
+			}
+			
+			return result;
 		}
 	}
 }

@@ -21,38 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- package net.tautausan.plist
+package net.tautausan.plist
 {
+	import flash.utils.*;
 	/**
-	 *	Property List Array 
+	 *	Property List Dictionary 
 	 * @author dai
-	 * 
+	 * @modifier xophiix
 	 */	
-	public class PArray extends PlistElement
+	dynamic public class PDict extends PlistElement
 	{
 		
-		public function PArray(x:XML)
+		public function PDict(o:*)
 		{
-			super(x);
+			super(o);
 		}
-
 		
-		override public function get object():*
-		{
-			if(!data)
-			{
-				var i:uint;
-				var length:uint=x.*.length();
-				var arr:Array=new Array();
-	
-				for(i=0;i<length;i++)
-				{
-					arr.push(ParseUtils.valueFromXML(x.*[i]));
+		override protected function xmlToData():* {			
+			var result:Object = new Object();
+			var key:XML;
+			var node:XML;
+			
+			for each(node in this.xml.*) {
+				if (node.name()=="key") {
+					key = node;
+				} else {
+					if (key) {
+						result[key]=ParseUtils.valueFromXML(node);
+					}
 				}
-
-				return arr;
 			}
-			return data;
+			
+			return result;
+		}
+		
+		override protected function dataToXml():XML {
+			var result:XML = <dict></dict>;
+			for (var key:String in this.object) {
+				if (key == "loops") {
+					trace("wtf");
+				}
+				
+				result.appendChild(new XML("<key>" + key + "</key>"));
+				result.appendChild(ParseUtils.valueToXML(this.object[key]));
+			}
+			
+			return result;
 		}
 	}
 }

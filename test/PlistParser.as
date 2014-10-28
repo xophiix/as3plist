@@ -14,17 +14,15 @@
 		}
 		
 		public function init():void
-			{
-				var loader:URLLoader=new URLLoader(new URLRequest(PLIST));
-				loader.addEventListener(Event.COMPLETE, onComplete);
-			}
-			
-			private function onComplete(e:Event):void
-			{
-				var plist:Plist10=new Plist10();
-				plist.parse(e.target.data);
-				
-			}
-
+		{
+			var loader:URLLoader=new URLLoader(new URLRequest(PLIST));
+			loader.addEventListener(Event.COMPLETE, onComplete);
+		}
+		
+		private function onComplete(e:Event):void
+		{
+			var plist:Plist1 0= new Plist10();
+			plist.decode(e.target.data);
+		}
 	}
 }
