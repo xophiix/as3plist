@@ -34,9 +34,9 @@
 		}
 		
 		override protected function xmlToData():* {			
-			var nodes = this.xml.*;
+			var nodes:* = this.xml.*;
 			var length:uint = nodes.length();
-			var result = new Array();
+			var result:Array = new Array();
 
 			for(var i:uint = 0; i < length; i++) {
 				result.push(ParseUtils.valueFromXML(nodes[i]));

@@ -32,7 +32,7 @@
 	 * @author dai
 	 * @modifier xophiix
 	 */		
-	public class PlistElement extends Proxy
+	class PlistElement extends Proxy
 	{
 		private var x:XML;
 		private var data:*;
@@ -56,7 +56,7 @@
 			
 			return null;
 		}
-		
+
 		override flash_proxy function callProperty(name:*, ... rest):*
 		{
 			var data:* = this.object;

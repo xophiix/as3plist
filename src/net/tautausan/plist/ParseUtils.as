@@ -28,16 +28,15 @@
 	 * @author dai
 	 * 
 	 */	
-	public class ParseUtils
+	class ParseUtils
 	{
 		public function ParseUtils()
 		{
 		}
 		
-		
 		static public function valueFromXML(node:XML):*
 		{
-			var val:*;
+			var val:PlistElement;
 			var nodeName:String = node.name().toString();
 			switch(nodeName)
 			{
@@ -65,7 +64,7 @@
 				default:					
 					throw new Error("valueFromXML: unknown plist node type " + nodeName);
 			}
-			return val;
+			return val.object;
 		}
 		
 		static public function valueToXML(val:*):XML 

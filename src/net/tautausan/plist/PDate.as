@@ -28,7 +28,7 @@
 	 * @author dai
 	 * @modifier xophiix
 	 */	
-	public class PDate extends PlistElement
+	class PDate extends PlistElement
 	{
 		public function PDate(o:*)
 		{

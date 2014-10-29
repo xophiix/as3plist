@@ -26,9 +26,9 @@
 	/**
 	 *	Property List Number 
 	 * @author dai
-	 * 
+	 * @modifier xophiix
 	 */	
-	public class PNumber extends PlistElement
+	class PNumber extends PlistElement
 	{
 		public function PNumber(o:*)
 		{

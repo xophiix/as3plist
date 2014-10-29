@@ -28,7 +28,7 @@
 	 * @author dai
 	 * @modifier xophiix
 	 */	
-	public class PBoolean extends PlistElement
+	class PBoolean extends PlistElement
 	{
 		public function PBoolean(o:*)
 		{

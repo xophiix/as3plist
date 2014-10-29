@@ -29,7 +29,7 @@ package net.tautausan.plist
 	 * @author dai
 	 * @modifier xophiix
 	 */	
-	dynamic public class PDict extends PlistElement
+	class PDict extends PlistElement
 	{
 		
 		public function PDict(o:*)

@@ -28,7 +28,7 @@
 	 * @author dai
 	 * @modifier xophiix
 	 */	
-	public class PString extends PlistElement
+	class PString extends PlistElement
 	{
 		public function PString(o:*)
 		{
